@@ -1,292 +1,708 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADSR-Canvas Premium | Aulatech</title>
+  <title>ADSR-Canvas | Aulatech</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 </head>
-<body>
+<body class="mode-splash">
 
-<!-- Splash Screen Intro -->
-<div class="splash-overlay" id="splash-overlay">
-  <div class="splash-card">
-    <div class="splash-logo">♬</div>
-    <h2>ADSR-Canvas Premium</h2>
-    <p>Bienvenido a la herramienta de síntesis profesional de Aulatech. Explora el sonido a través de la visualización en tiempo real y la secuenciación creativa.</p>
-    
-    <div class="splash-features">
-      <div class="s-feat">
-        <span class="icon">⊞</span>
-        <div><b>ADSR Editor</b><span>Modela la envolvente del sonido arrastrando nodos interactivos.</span></div>
+<!-- ═══════════════════════════════════ MODALES ═══════════════════════════════════ -->
+
+<!-- Tutorial Modal -->
+<div class="modal-overlay" id="tutorial-modal" role="dialog" aria-modal="true" aria-label="Tutorial" style="display:none">
+  <div class="modal-box tutorial-box">
+    <button class="modal-close" id="tut-close" aria-label="Cerrar tutorial">✕</button>
+    <div class="tut-slides">
+      <div class="tut-slide active" id="tut-slide-0">
+        <div class="tut-icon">🎵</div>
+        <h2>Benvingut a ADSR-Canvas</h2>
+        <p>Aquesta eina et permet <b>crear i escoltar sons</b> com ho faria un productor musical professional. No necessites saber música — només explorar i experimentar.</p>
+        <p>En 5 passos t'expliquem tot el que pots fer aquí.</p>
       </div>
-      <div class="s-feat">
-        <span class="icon">✨</span>
-        <div><b>Efectos Premium</b><span>Diales de precisión para Filtros, Reverb y Delay con visualización de curva.</span></div>
+      <div class="tut-slide" id="tut-slide-1">
+        <div class="tut-icon">⊞</div>
+        <h2>Què és l’ADSR?</h2>
+        <p>L'<b>ADSR</b> controla com evoluciona el volum d'un so al llarg del temps:</p>
+        <ul class="tut-list">
+          <li><b>A – Atac:</b> Quant triga a sonar fort des del principi?</li>
+          <li><b>D – Decaiment:</b> Quant triga a baixar al volum normal?</li>
+          <li><b>S – Sostingut:</b> Quina intensitat té el so mentre mantens la nota?</li>
+          <li><b>R – Lliberació:</b> Quant triga a apagar-se al deixar anar la nota?</li>
+        </ul>
+        <p>Arrossega els punts a l'editor per canviar la forma del so.</p>
       </div>
-      <div class="s-feat">
-        <span class="icon">🌊</span>
-        <div><b>Visualización Dual</b><span>Analizador FFT y Osciloscopio para ver cada armónico y ciclo de onda.</span></div>
+      <div class="tut-slide" id="tut-slide-2">
+        <div class="tut-icon">✨</div>
+        <h2>Efectes de So</h2>
+        <p>Els <b>efectes</b> transformen el so base afegint textures i espais:</p>
+        <ul class="tut-list">
+          <li><b>Filtre:</b> Treu freqüències altes, baixes o mitjanes del so.</li>
+          <li><b>Reverb:</b> Simula que estàs tocant en una habitació gran o una catedral.</li>
+          <li><b>Eco (Delay):</b> Crea ecos que es repeteixen després de cada nota.</li>
+        </ul>
+        <p>Gira els dials arrossegant cap amunt o cap avall.</p>
       </div>
-      <div class="s-feat">
-        <span class="icon">🎹</span>
-        <div><b>Secuenciador</b><span>Crea ritmos y melodías con 16 pasos y presets profesionales.</span></div>
+      <div class="tut-slide" id="tut-slide-3">
+        <div class="tut-icon">📊</div>
+        <h2>Els Visualitzadors</h2>
+        <p>Els dos panells et mostren el so de forma visual:</p>
+        <ul class="tut-list">
+          <li><b>Analitzador FFT:</b> Mostra les freqüències. Esquerra = greus, dreta = aguts.</li>
+          <li><b>Oscil·loscopi:</b> Mostra la forma de l'ona en temps real.</li>
+        </ul>
+        <p>Prem ▶ PROVAR SO i observa com es mouen mentre sona.</p>
+      </div>
+      <div class="tut-slide" id="tut-slide-4">
+        <div class="tut-icon">🎹</div>
+        <h2>El Seqüenciador</h2>
+        <p>El <b>seqüenciador de 16 passos</b> et permet crear ritmes i melodies:</p>
+        <ul class="tut-list">
+          <li>Fes clic a les cel·les per activar notes.</li>
+          <li>Prem ▶ REPRODUIR per escoltar el patró en bucle.</li>
+          <li>Fes servir els presets per carregar patrons d'exemple.</li>
+        </ul>
+        <p>Ja estàs a punt! Fes servir l'<b>Arena</b> per als reptes guiats o el <b>Sandbox</b> per explorar lliurement.</p>
       </div>
     </div>
-    
-    <button class="btn-start" id="start-app">COMENZAR EXPERIENCIA</button>
+    <div class="tut-nav">
+      <button class="btn btn-out btn-sm" id="tut-prev">← Anterior</button>
+      <span class="tut-dots" id="tut-dots"></span>
+      <button class="btn btn-cyan btn-sm" id="tut-next">Següent →</button>
+    </div>
   </div>
 </div>
 
-<header class="app-header">
-  <div class="logo">
-    <div class="logo-icon">♬</div>
-    <h1>ADSR<span>-Canvas</span></h1>
+<!-- Info Modal -->
+<div class="modal-overlay" id="info-modal" role="dialog" aria-modal="true" style="display:none">
+  <div class="modal-box info-box">
+    <button class="modal-close" id="info-close" aria-label="Cerrar">✕</button>
+    <h3 id="info-modal-title"></h3>
+    <p id="info-modal-body"></p>
   </div>
-  <div class="badge">PREMIUM · AULATECH</div>
-</header>
+</div>
 
-<main class="app-main">
-  
-  <!-- Módulo 1: ADSR Canvas -->
-  <section class="module" id="module-adsr">
-    <div class="module-header">
-      <h2><span class="icon">⊞</span> ADSR Envelope</h2>
-      <span class="tag">CANVAS</span>
+<!-- ═══════════════════════════════════ SPLASH ═══════════════════════════════════ -->
+<div class="splash-overlay" id="splash-overlay">
+  <div class="splash-card">
+    <div class="splash-logo">♬</div>
+    <h2>ADSR-Canvas</h2>
+    <p>Eina de síntesi sonora d'Aulatech. Aprèn a crear sons com un productor musical.</p>
+    <div class="splash-features">
+      <div class="s-feat"><span class="icon">⊞</span><div><b>Editor ADSR</b><span>Envolvent del so interactiva.</span></div></div>
+      <div class="s-feat"><span class="icon">✨</span><div><b>Efectes</b><span>Filtre, Reverb i Eco.</span></div></div>
+      <div class="s-feat"><span class="icon">🌊</span><div><b>Visualitzadors</b><span>FFT i Oscil·loscopi en temps real.</span></div></div>
+      <div class="s-feat"><span class="icon">🎹</span><div><b>Seqüenciador</b><span>Crea ritmes i melodies de 16 passos.</span></div></div>
     </div>
-    <div class="module-body">
-      <div class="canvas-wrapper">
-        <canvas id="adsrCanvas"></canvas>
-      </div>
-      <div class="adsr-readouts">
-        <div class="adsr-readout" id="readout-attack">
-          <div class="label">Attack</div>
-          <div class="value" id="val-attack">0.05s</div>
-          <div class="tooltip"><b>Attack:</b> Tiempo que tarda el sonido en llegar a su volumen máximo tras pulsar la nota.</div>
-        </div>
-        <div class="adsr-readout" id="readout-decay">
-          <div class="label">Decay</div>
-          <div class="value" id="val-decay">0.20s</div>
-          <div class="tooltip"><b>Decay:</b> Tiempo que tarda el volumen en bajar desde el pico hasta el nivel de sostenido.</div>
-        </div>
-        <div class="adsr-readout" id="readout-sustain">
-          <div class="label">Sustain</div>
-          <div class="value" id="val-sustain">0.70</div>
-          <div class="tooltip"><b>Sustain:</b> Nivel de volumen constante mientras la nota se mantiene pulsada (0.0 a 1.0).</div>
-        </div>
-        <div class="adsr-readout" id="readout-release">
-          <div class="label">Release</div>
-          <div class="value" id="val-release">0.40s</div>
-          <div class="tooltip"><b>Release:</b> Tiempo que tarda el sonido en desaparecer tras soltar la nota.</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <button class="btn-start" id="start-app">COMENZAR</button>
+    <button class="btn-tutorial-splash" id="splash-tutorial-btn">Primera vegada? Mira el tutorial →</button>
+  </div>
+</div>
 
-  <!-- Módulo 5: Premium FX Dials (REORDERED BELOW ADSR) -->
-  <section class="module" id="module-fx">
-    <div class="module-header">
-      <h2><span class="icon">✨</span> Efectos Premium</h2>
-      <span class="tag">FX CHAIN</span>
+<!-- ═══════════════════════════════════ HOME SCREEN ═══════════════════════════════ -->
+<div id="home-screen">
+  <div class="home-header">
+    <div class="home-logo-wrap">
+      <div class="logo-icon">♬</div>
+      <span class="home-logo-text">ADSR<span>-Canvas</span></span>
     </div>
-    <div class="module-body">
-      <div class="fx-grid">
-        <!-- Filtro con Curva -->
-        <div class="fx-section">
-          <h3>Filtro Resonante</h3>
-          <div class="filter-layout">
-            <div class="filter-left">
-              <select id="filter-type">
-                <option value="lowpass">Lowpass</option>
-                <option value="highpass">Highpass</option>
-                <option value="bandpass">Bandpass</option>
-                <option value="notch">Notch</option>
+    <button class="btn btn-out btn-sm" id="home-help-btn">? Ajuda</button>
+  </div>
+  <div class="home-hero">
+    <h2>Tria el teu mode</h2>
+    <p>Vols aprendre amb reptes guiats o explorar lliurement?</p>
+  </div>
+  <div class="mode-cards">
+
+    <!-- Arena -->
+    <div class="mode-card mode-card-arena" id="btn-arena" role="button" tabindex="0" aria-label="Entrar al modo Arena">
+      <div class="mode-card-glow"></div>
+      <div class="mode-card-icon">🏟️</div>
+      <h3>Arena</h3>
+      <p>Reptes guiats per aprendre síntesi sonora pas a pas. Cada exercici t'ensenya un concepte nou.</p>
+      <div class="mode-card-details">
+        <span class="mode-card-tag">7 exercicis</span>
+        <span class="mode-card-progress" id="arena-progress-text">0 / 7 completats</span>
+      </div>
+      <div class="exercise-previews">
+        <span class="ex-preview">🥁 Percussiu</span>
+        <span class="ex-preview">🎻 Nota Llarga</span>
+        <span class="ex-preview">🌑 Baix</span>
+        <span class="ex-preview">🚀 Eco…</span>
+      </div>
+      <button class="btn btn-cyan mode-enter-btn">Entrar a l'Arena →</button>
+    </div>
+
+    <!-- Sandbox -->
+    <div class="mode-card mode-card-sandbox" id="btn-sandbox" role="button" tabindex="0" aria-label="Entrar al modo Sandbox">
+      <div class="mode-card-glow sandbox-glow"></div>
+      <div class="mode-card-icon">🎛️</div>
+      <h3>Sandbox</h3>
+      <p>Exploració lliure amb totes les eines disponibles. Sense límits ni objectius — només creativitat.</p>
+      <div class="mode-card-details">
+        <span class="mode-card-tag">Mode lliure</span>
+        <span class="mode-card-progress">Seqüenciador · Efectes · Visualitzadors</span>
+      </div>
+      <div class="exercise-previews">
+        <span class="ex-preview">🎹 Seqüenciador</span>
+        <span class="ex-preview">💾 Desar</span>
+        <span class="ex-preview">🏆 Reptes</span>
+        <span class="ex-preview">📊 FFT…</span>
+      </div>
+      <button class="btn btn-out mode-enter-btn">Explorar Sandbox →</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ ARENA SCREEN ══════════════════════════════ -->
+<div id="arena-screen">
+
+  <!-- Arena Nav Header -->
+  <header class="arena-header" role="banner">
+    <button class="btn btn-out btn-sm" id="arena-back" aria-label="Tornar al menú principal">← Tornar</button>
+    <div class="arena-header-center">
+      <span class="arena-title">🏟️ Arena</span>
+      <span class="exercise-counter" id="exercise-counter">Exercici 1 / 7</span>
+      <span class="ex-dots" id="ex-dots"></span>
+    </div>
+    <button class="btn btn-out btn-sm" id="arena-help-btn">? Ajuda</button>
+  </header>
+
+  <!-- Exercise Card -->
+  <div class="exercise-card" id="exercise-card">
+    <div class="exercise-card-left">
+      <div class="ex-emoji" id="ex-emoji">🥁</div>
+      <div class="ex-text">
+        <h2 id="ex-title">El Golpe Seco</h2>
+        <p id="ex-desc"></p>
+      </div>
+    </div>
+    <div class="exercise-card-right">
+      <div class="ex-tips">
+        <div class="ex-tips-label">💡 Pistes</div>
+        <ul id="ex-tips-list"></ul>
+      </div>
+      <div class="ex-actions">
+        <button id="ex-test" class="btn btn-cyan" aria-label="Provar so actual">▶ Provar</button>
+        <button id="ex-check" class="btn btn-mag" aria-label="Comprovar si el so és correcte">✓ Comprovar</button>
+      </div>
+      <div class="exercise-feedback" id="ex-feedback"></div>
+      <div class="ex-nav">
+        <button class="btn btn-out btn-sm" id="ex-prev" aria-label="Exercici anterior">← Anterior</button>
+        <button class="btn btn-out btn-sm" id="ex-next" aria-label="Següent exercici">Següent →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arena Tools (reuses same modules) -->
+  <main class="app-main arena-main" role="main">
+    <section class="module" id="arena-module-adsr" aria-label="Editor ADSR">
+      <div class="module-header">
+        <h2><span class="icon">⊞</span> ADSR Envelope</h2>
+        <span class="tag">CANVAS</span>
+      </div>
+      <div class="module-body">
+        <div class="canvas-wrapper">
+          <canvas id="adsrCanvas" aria-label="Editor interactivo de envolvente ADSR"></canvas>
+        </div>
+        <div class="adsr-readouts">
+          <div class="adsr-readout" id="readout-attack">
+            <div class="label">A – Atac</div>
+            <div class="value" id="val-attack" aria-live="polite">0.05s</div>
+            <div class="tooltip"><b>Atac:</b> Temps que triga el so a arribar al màxim. Curt = percussiu. Llarg = entrada suau.</div>
+          </div>
+          <div class="adsr-readout" id="readout-decay">
+            <div class="label">D – Decaiment</div>
+            <div class="value" id="val-decay" aria-live="polite">0.20s</div>
+            <div class="tooltip"><b>Decaiment:</b> Temps en baixar del pic al nivell de sostingut.</div>
+          </div>
+          <div class="adsr-readout" id="readout-sustain">
+            <div class="label">S – Sostingut</div>
+            <div class="value" id="val-sustain" aria-live="polite">0.70</div>
+            <div class="tooltip"><b>Sostingut:</b> Nivell de volum mentre la nota està premuda (0 a 1).</div>
+          </div>
+          <div class="adsr-readout" id="readout-release">
+            <div class="label">R – Lliberació</div>
+            <div class="value" id="val-release" aria-live="polite">0.40s</div>
+            <div class="tooltip"><b>Lliberació:</b> Temps en desaparèixer en deixar anar la nota.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="arena-module-audio" aria-label="Motor de audio">
+      <div class="module-header">
+        <h2><span class="icon">🔊</span> Audio Engine</h2>
+        <span class="tag">TONE.JS</span>
+      </div>
+      <div class="module-body">
+        <div class="audio-controls">
+          <div class="control-row">
+            <div class="control-group">
+              <label for="synth-type">Instrument</label>
+              <select id="synth-type" aria-label="Tipus de sintetitzador">
+                <option value="synth">Synth — oscil·lador bàsic</option>
+                <option value="amsynth">AM Synth — modulació d'amplitud</option>
+                <option value="fmsynth">FM Synth — modulació de freqüència</option>
+                <option value="monosynth">Mono Synth — monofònic amb filtre</option>
+                <option value="sampler">Sampler — usa el teu propi àudio</option>
               </select>
-              <div class="filter-curve-box">
-                <canvas id="filterCurveCanvas"></canvas>
-              </div>
             </div>
-            <div class="filter-knobs">
-              <div class="knob-container">
-                <div class="knob" id="knob-cutoff" data-min="20" data-max="20000" data-val="2500" data-step="1"></div>
-                <div class="knob-label">Cutoff</div>
-                <div class="knob-value" id="val-cutoff">2.5k</div>
-              </div>
-              <div class="knob-container">
-                <div class="knob" id="knob-res" data-min="0" data-max="20" data-val="1" data-step="0.1"></div>
-                <div class="knob-label">Res</div>
-                <div class="knob-value" id="val-res">1.0</div>
-              </div>
+            <div class="control-group">
+              <label for="osc-type">Forma d'Ona</label>
+              <select id="osc-type" aria-label="Forma d'ona">
+                <option value="triangle">△ Triangular</option>
+                <option value="sine">○ Senoidal</option>
+                <option value="square">□ Quadrada</option>
+                <option value="sawtooth">◺ Serra (Sawtooth)</option>
+              </select>
             </div>
-          </div>
-        </div>
-
-        <!-- Reverb Dials -->
-        <div class="fx-section">
-          <h3>Reverb</h3>
-          <div class="knobs-row">
-            <div class="knob-container">
-              <div class="knob" id="knob-rev-decay" data-min="0.1" data-max="10" data-val="1.5" data-step="0.1"></div>
-              <div class="knob-label">Decay</div>
-              <div class="knob-value mag" id="val-rev-decay">1.5s</div>
-            </div>
-            <div class="knob-container">
-              <div class="knob" id="knob-rev-mix" data-min="0" data-max="1" data-val="0.3" data-step="0.01"></div>
-              <div class="knob-label">Mix</div>
-              <div class="knob-value mag" id="val-rev-mix">30%</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Delay Dials -->
-        <div class="fx-section">
-          <h3>Delay</h3>
-          <div class="knobs-row">
-            <div class="knob-container">
-              <div class="knob" id="knob-del-time" data-min="0.05" data-max="1" data-val="0.25" data-step="0.01"></div>
-              <div class="knob-label">Time</div>
-              <div class="knob-value mag" id="val-del-time">250ms</div>
-            </div>
-            <div class="knob-container">
-              <div class="knob" id="knob-del-fback" data-min="0" data-max="0.9" data-val="0.4" data-step="0.01"></div>
-              <div class="knob-label">Feedback</div>
-              <div class="knob-value mag" id="val-del-fback">40%</div>
-            </div>
-            <div class="knob-container">
-              <div class="knob" id="knob-del-mix" data-min="0" data-max="1" data-val="0.2" data-step="0.01"></div>
-              <div class="knob-label">Mix</div>
-              <div class="knob-value mag" id="val-del-mix">20%</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Módulo 2: Audio Engine -->
-  <section class="module" id="module-audio">
-    <div class="module-header">
-      <h2><span class="icon">🔊</span> Audio Engine</h2>
-      <span class="tag">TONE.JS</span>
-    </div>
-    <div class="module-body">
-      <div class="audio-controls">
-        <div class="control-row">
-          <div class="control-group">
-            <label>Instrumento</label>
-            <select id="synth-type">
-              <option value="synth">Synth</option>
-              <option value="amsynth">AMSynth</option>
-              <option value="fmsynth">FMSynth</option>
-              <option value="monosynth">MonoSynth</option>
-              <option value="sampler">Sampler (Custom)</option>
-            </select>
           </div>
           <div class="control-group">
-            <label>Forma de Onda</label>
-            <select id="osc-type">
-              <option value="triangle">△ Triangle</option>
-              <option value="sine">○ Sine</option>
-              <option value="square">□ Square</option>
-              <option value="sawtooth">◺ Sawtooth</option>
-            </select>
+            <label>Volum Principal</label>
+            <div class="slider-row">
+              <input type="range" id="master-vol" min="-40" max="0" value="-8" aria-label="Volum principal">
+              <div class="slider-val" id="val-vol" aria-live="polite">-8dB</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button id="test-btn" class="btn btn-cyan" aria-label="Provar so">▶ PROVAR SO</button>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="control-group">
-          <label>Sampler Personalizado</label>
-          <div class="drop-zone" id="drop-zone">
-            <input type="file" id="sample-file" accept="audio/*">
-            <p>📁 Arrastra <b>.wav/.mp3</b> o haz clic</p>
-            <div id="file-name" class="filename"></div>
+    <section class="module" id="arena-module-fx" aria-label="Efectos">
+      <div class="module-header">
+        <h2><span class="icon">✨</span> Efectos</h2>
+        <span class="tag">FX</span>
+      </div>
+      <div class="module-body">
+        <div class="fx-grid">
+          <div class="fx-section">
+            <h3>Filtre <span class="en-label">(Filter)</span></h3>
+            <div class="filter-layout">
+              <div class="filter-left">
+                <select id="filter-type" aria-label="Tipus de filtre">
+                  <option value="lowpass">Pas Baix — elimina aguts</option>
+                  <option value="highpass">Pas Alt — elimina greus</option>
+                  <option value="bandpass">Pas Banda — deixa un rang</option>
+                  <option value="notch">Elimina Banda — elimina una freqüència</option>
+                </select>
+                <div class="filter-curve-box">
+                  <canvas id="filterCurveCanvas"></canvas>
+                </div>
+              </div>
+              <div class="filter-knobs">
+                <div class="knob-container" tabindex="0" role="slider" aria-label="Tall (Cutoff)" aria-valuemin="20" aria-valuemax="20000" aria-valuenow="2500">
+                  <div class="knob" id="knob-cutoff" data-min="20" data-max="20000" data-val="2500" data-step="1"></div>
+                  <div class="knob-label">Tall <span class="en-label">(Cutoff)</span></div>
+                  <div class="knob-value" id="val-cutoff" aria-live="polite">2.5k</div>
+                  <div class="knob-tooltip">Freqüència de tall del filtre.</div>
+                </div>
+                <div class="knob-container" tabindex="0" role="slider" aria-label="Ressonància" aria-valuemin="0" aria-valuemax="20" aria-valuenow="1">
+                  <div class="knob" id="knob-res" data-min="0" data-max="20" data-val="1" data-step="0.1"></div>
+                  <div class="knob-label">Res <span class="en-label">(Resonance)</span></div>
+                  <div class="knob-value" id="val-res" aria-live="polite">1.0</div>
+                  <div class="knob-tooltip">Amplifica les freqüències al voltant del tall.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fx-section">
+            <h3>Reverb</h3>
+            <div class="knobs-row">
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Decay Reverb">
+                <div class="knob" id="knob-rev-decay" data-min="0.1" data-max="10" data-val="1.5" data-step="0.1"></div>
+                <div class="knob-label">Decaiment <span class="en-label">(Decay)</span></div>
+                <div class="knob-value mag" id="val-rev-decay" aria-live="polite">1.5s</div>
+                <div class="knob-tooltip">Durada del ressò del reverb.</div>
+              </div>
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Mix Reverb">
+                <div class="knob" id="knob-rev-mix" data-min="0" data-max="1" data-val="0.3" data-step="0.01"></div>
+                <div class="knob-label">Mescla <span class="en-label">(Mix)</span></div>
+                <div class="knob-value mag" id="val-rev-mix" aria-live="polite">30%</div>
+                <div class="knob-tooltip">Quantitat de reverb en la mescla.</div>
+              </div>
+            </div>
+          </div>
+          <div class="fx-section">
+            <h3>Delay <span class="en-label">(Eco)</span></h3>
+            <div class="knobs-row">
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Temps Delay">
+                <div class="knob" id="knob-del-time" data-min="0.05" data-max="1" data-val="0.25" data-step="0.01"></div>
+                <div class="knob-label">Temps <span class="en-label">(Time)</span></div>
+                <div class="knob-value mag" id="val-del-time" aria-live="polite">250ms</div>
+                <div class="knob-tooltip">Temps entre cada eco.</div>
+              </div>
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Feedback Delay">
+                <div class="knob" id="knob-del-fback" data-min="0" data-max="0.9" data-val="0.4" data-step="0.01"></div>
+                <div class="knob-label">Retro. <span class="en-label">(Feedback)</span></div>
+                <div class="knob-value mag" id="val-del-fback" aria-live="polite">40%</div>
+                <div class="knob-tooltip">Quants ecos es generen.</div>
+              </div>
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Mix Delay">
+                <div class="knob" id="knob-del-mix" data-min="0" data-max="1" data-val="0.2" data-step="0.01"></div>
+                <div class="knob-label">Mescla <span class="en-label">(Mix)</span></div>
+                <div class="knob-value mag" id="val-del-mix" aria-live="polite">20%</div>
+                <div class="knob-tooltip">Quantitat d'eco en la mescla.</div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="control-group">
-          <div class="slider-row">
-            <input type="range" id="master-vol" min="-40" max="0" value="-8">
-            <div class="slider-val" id="val-vol">-8dB</div>
+    <section class="module" id="arena-module-fft" aria-label="Analizador FFT">
+      <div class="module-header">
+        <h2><span class="icon">📊</span> Analitzador FFT <span class="header-subtitle">Quines freqüències té el so?</span></h2>
+        <span class="tag">FREQÜÈNCIA</span>
+      </div>
+      <div class="module-body">
+        <div class="viz-box">
+          <canvas id="fftCanvas"></canvas>
+          <div class="viz-label">Spectrum Analysis</div>
+        </div>
+        <div class="viz-explanation">
+          <span>← Greus</span>
+          <span>Barra alta = més energia</span>
+          <span>Aguts →</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="arena-module-osc" aria-label="Osciloscopio">
+      <div class="module-header">
+        <h2><span class="icon">🌊</span> Oscil·loscopi <span class="header-subtitle">Quina forma té l'ona?</span></h2>
+        <span class="tag">OSCIL·LOSCOPI</span>
+      </div>
+      <div class="module-body">
+        <div class="viz-box">
+          <canvas id="oscCanvas"></canvas>
+          <div class="viz-label">Live Waveform</div>
+        </div>
+        <div class="viz-explanation">
+          <span>Horitzontal = temps</span>
+          <span>Vertical = amplitud</span>
+          <span>Canvia segons l'ona triada</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════ SANDBOX SCREEN ════════════════════════════ -->
+<div id="sandbox-screen">
+
+  <header class="app-header" role="banner">
+    <div class="logo">
+      <div class="logo-icon">♬</div>
+      <h1>ADSR<span>-Canvas</span></h1>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-out btn-sm" id="sandbox-home-btn" aria-label="Tornar al menú principal">🏠 Inici</button>
+      <button class="btn btn-out btn-sm" id="help-btn" aria-label="Obrir tutorial">? Ajuda</button>
+      <div class="badge">AULATECH</div>
+    </div>
+  </header>
+
+  <!-- Challenges Panel -->
+  <div class="challenges-panel" id="challenges-panel">
+    <button class="challenges-toggle" id="challenges-toggle" aria-expanded="true" aria-controls="challenges-content">
+      <span>🏆 Objectius d'Exploració</span>
+      <span class="ch-progress" id="ch-progress">0 / 5</span>
+      <span class="ch-arrow" id="ch-arrow">▼</span>
+    </button>
+    <div class="challenges-content" id="challenges-content">
+      <div class="challenge-item" id="ch-first_note" data-id="first_note">
+        <span class="ch-check">○</span>
+        <div class="ch-text"><b>Primera nota</b> <span>Prem PROVAR SO per escoltar el teu primer so</span></div>
+      </div>
+      <div class="challenge-item" id="ch-edit_adsr" data-id="edit_adsr">
+        <span class="ch-check">○</span>
+        <div class="ch-text"><b>Esculpeix el so</b> <span>Arrossega un punt a l'editor ADSR</span></div>
+      </div>
+      <div class="challenge-item" id="ch-use_fx" data-id="use_fx">
+        <span class="ch-check">○</span>
+        <div class="ch-text"><b>Afegeix efectes</b> <span>Ajusta un dial de Reverb o Eco</span></div>
+      </div>
+      <div class="challenge-item" id="ch-play_seq" data-id="play_seq">
+        <span class="ch-check">○</span>
+        <div class="ch-text"><b>Crea un ritme</b> <span>Activa el seqüenciador premuda REPRODUIR</span></div>
+      </div>
+      <div class="challenge-item" id="ch-load_preset" data-id="load_preset">
+        <span class="ch-check">○</span>
+        <div class="ch-text"><b>Explora els presets</b> <span>Carrega un dels presets del seqüenciador</span></div>
+      </div>
+    </div>
+  </div>
+
+  <main class="app-main" role="main">
+
+    <section class="module" id="module-adsr" aria-label="Editor ADSR">
+      <div class="module-header">
+        <h2><span class="icon">⊞</span> ADSR Envelope</h2>
+        <span class="tag">CANVAS</span>
+      </div>
+      <div class="module-body">
+        <div class="canvas-wrapper">
+          <canvas id="adsrCanvas-sb" aria-label="Editor interactivo ADSR (sandbox)"></canvas>
+        </div>
+        <div class="adsr-readouts">
+          <div class="adsr-readout" id="readout-attack-sb">
+            <div class="label">A – Atac</div>
+            <div class="value" id="val-attack-sb" aria-live="polite">0.05s</div>
+            <div class="tooltip"><b>Atac:</b> Temps que triga el so a arribar al màxim. Curt = percussiu. Llarg = entrada suau.</div>
+          </div>
+          <div class="adsr-readout" id="readout-decay-sb">
+            <div class="label">D – Decaiment</div>
+            <div class="value" id="val-decay-sb" aria-live="polite">0.20s</div>
+            <div class="tooltip"><b>Decaiment:</b> Temps en baixar del pic al nivell de sostingut.</div>
+          </div>
+          <div class="adsr-readout" id="readout-sustain-sb">
+            <div class="label">S – Sostingut</div>
+            <div class="value" id="val-sustain-sb" aria-live="polite">0.70</div>
+            <div class="tooltip"><b>Sostingut:</b> Nivell de volum mentre la nota està premuda (0 a 1).</div>
+          </div>
+          <div class="adsr-readout" id="readout-release-sb">
+            <div class="label">R – Lliberació</div>
+            <div class="value" id="val-release-sb" aria-live="polite">0.40s</div>
+            <div class="tooltip"><b>Lliberació:</b> Temps en desaparèixer en deixar anar la nota.</div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="btn-row">
-          <button id="test-btn" class="btn btn-cyan">▶ TEST</button>
-          <button id="clear-sample" class="btn btn-out btn-sm">Limpiar Sample</button>
+    <section class="module" id="module-fx" aria-label="Efectos">
+      <div class="module-header">
+        <h2><span class="icon">✨</span> Efectes Premium</h2>
+        <span class="tag">FX CHAIN</span>
+      </div>
+      <div class="module-body">
+        <div class="fx-grid">
+          <div class="fx-section">
+            <h3>Filtre Ressonant <span class="en-label">(Filter)</span>
+              <button class="info-btn" data-title="Filtre Ressonant" data-body="El filtre elimina certes freqüències. Pas Baix deixa passar els greus. Pas Alt deixa passar els aguts. La Ressonància amplifica les freqüències a prop del tall.">ⓘ</button>
+            </h3>
+            <div class="filter-layout">
+              <div class="filter-left">
+                <select id="filter-type-sb" aria-label="Tipus de filtre">
+                  <option value="lowpass">Pas Baix (Lowpass) — elimina aguts</option>
+                  <option value="highpass">Pas Alt (Highpass) — elimina greus</option>
+                  <option value="bandpass">Pas Banda (Bandpass) — deixa un rang</option>
+                  <option value="notch">Elimina Banda (Notch) — elimina una freqüència</option>
+                </select>
+                <div class="filter-curve-box">
+                  <canvas id="filterCurveCanvas-sb"></canvas>
+                </div>
+              </div>
+              <div class="filter-knobs">
+                <div class="knob-container" tabindex="0" role="slider" aria-label="Tall Cutoff" aria-valuemin="20" aria-valuemax="20000" aria-valuenow="2500">
+                  <div class="knob" id="knob-cutoff-sb" data-min="20" data-max="20000" data-val="2500" data-step="1"></div>
+                  <div class="knob-label">Tall <span class="en-label">(Cutoff)</span></div>
+                  <div class="knob-value" id="val-cutoff-sb" aria-live="polite">2.5k</div>
+                  <div class="knob-tooltip">Freqüència de tall del filtre. Determina on comença a actuar.</div>
+                </div>
+                <div class="knob-container" tabindex="0" role="slider" aria-label="Ressonància" aria-valuemin="0" aria-valuemax="20" aria-valuenow="1">
+                  <div class="knob" id="knob-res-sb" data-min="0" data-max="20" data-val="1" data-step="0.1"></div>
+                  <div class="knob-label">Res <span class="en-label">(Resonance)</span></div>
+                  <div class="knob-value" id="val-res-sb" aria-live="polite">1.0</div>
+                  <div class="knob-tooltip">Amplifica les freqüències al voltant del punt de tall.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fx-section">
+            <h3>Reverb
+              <button class="info-btn" data-title="Reverb (Reverberació)" data-body="Simula un espai físic. Decay = quant triga a esvair-se el so. Mescla = quantitat de reverb que es barreja amb el so original.">ⓘ</button>
+            </h3>
+            <div class="knobs-row">
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Decay Reverb">
+                <div class="knob" id="knob-rev-decay-sb" data-min="0.1" data-max="10" data-val="1.5" data-step="0.1"></div>
+                <div class="knob-label">Decaiment <span class="en-label">(Decay)</span></div>
+                <div class="knob-value mag" id="val-rev-decay-sb" aria-live="polite">1.5s</div>
+                <div class="knob-tooltip">Durada del ressò. Més llarg = sala més gran.</div>
+              </div>
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Mix Reverb">
+                <div class="knob" id="knob-rev-mix-sb" data-min="0" data-max="1" data-val="0.3" data-step="0.01"></div>
+                <div class="knob-label">Mescla <span class="en-label">(Mix)</span></div>
+                <div class="knob-value mag" id="val-rev-mix-sb" aria-live="polite">30%</div>
+                <div class="knob-tooltip">0% = seco, 100% = todo reverb.</div>
+              </div>
+            </div>
+          </div>
+          <div class="fx-section">
+            <h3>Delay <span class="en-label">(Eco)</span>
+              <button class="info-btn" data-title="Delay (Eco)" data-body="Crea ecos que es repeteixen. Time = temps entre ecos. Feedback = quants ecos. Mescla = quantitat d'eco que es barreja.">ⓘ</button>
+            </h3>
+            <div class="knobs-row">
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Temps Delay">
+                <div class="knob" id="knob-del-time-sb" data-min="0.05" data-max="1" data-val="0.25" data-step="0.01"></div>
+                <div class="knob-label">Temps <span class="en-label">(Time)</span></div>
+                <div class="knob-value mag" id="val-del-time-sb" aria-live="polite">250ms</div>
+                <div class="knob-tooltip">Temps entre cada eco.</div>
+              </div>
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Feedback Delay">
+                <div class="knob" id="knob-del-fback-sb" data-min="0" data-max="0.9" data-val="0.4" data-step="0.01"></div>
+                <div class="knob-label">Retro. <span class="en-label">(Feedback)</span></div>
+                <div class="knob-value mag" id="val-del-fback-sb" aria-live="polite">40%</div>
+                <div class="knob-tooltip">Quants ecos es generen.</div>
+              </div>
+              <div class="knob-container" tabindex="0" role="slider" aria-label="Mescla Delay">
+                <div class="knob" id="knob-del-mix-sb" data-min="0" data-max="1" data-val="0.2" data-step="0.01"></div>
+                <div class="knob-label">Mescla <span class="en-label">(Mix)</span></div>
+                <div class="knob-value mag" id="val-del-mix-sb" aria-live="polite">20%</div>
+                <div class="knob-tooltip">Quantitat d'eco en la mescla.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Módulo 3: Visualizador FFT (Fila separada) -->
-  <section class="module" id="module-viz-fft">
-    <div class="module-header">
-      <h2><span class="icon">📊</span> Analizador FFT</h2>
-      <span class="tag">FRECUENCIA</span>
-    </div>
-    <div class="module-body">
-      <div class="viz-box">
-        <canvas id="fftCanvas"></canvas>
-        <div class="viz-label">Spectrum Analysis</div>
+    <section class="module" id="module-audio" aria-label="Motor de audio">
+      <div class="module-header">
+        <h2><span class="icon">🔊</span> Audio Engine</h2>
+        <span class="tag">TONE.JS</span>
       </div>
-    </div>
-  </section>
-
-  <!-- Módulo 4: Visualizador OSC (Fila separada) -->
-  <section class="module" id="module-viz-osc">
-    <div class="module-header">
-      <h2><span class="icon">🌊</span> Osciloscopio</h2>
-      <span class="tag">TIMEDOMAIN</span>
-    </div>
-    <div class="module-body">
-      <div class="viz-box">
-        <canvas id="oscCanvas"></canvas>
-        <div class="viz-label">Live Waveform</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Módulo 6: Sequencer -->
-  <section class="module" id="module-seq">
-    <div class="module-header">
-      <h2><span class="icon">🎹</span> 16-Step Sequencer</h2>
-      <div class="badge btn-sm playing-state" style="display:none">LIVE</div>
-    </div>
-    <div class="module-body">
-      <div class="seq-toolbar">
-        <button id="seq-play" class="btn btn-play-premium">▶ PLAY</button>
-        <button id="seq-clear" class="btn btn-out btn-sm">Limpiar</button>
-        <div class="bpm-ctrl">
-          <label>BPM</label>
-          <input type="range" id="bpm-slider" min="60" max="180" value="120">
-          <span class="bpm-val" id="bpm-val">120</span>
+      <div class="module-body">
+        <div class="audio-controls">
+          <div class="control-row">
+            <div class="control-group">
+              <label for="synth-type-sb">Instrument
+                <button class="info-btn" data-title="Tipus de sintetitzador" data-body="Synth: oscil·lador bàsic. AM Synth: modulació d'amplitud (so metàl·lic). FM Synth: modulació de freqüència (sons rics). Mono Synth: una nota a la vegada. Sampler: usa el teu propi fitxer d'àudio.">ⓘ</button>
+              </label>
+              <select id="synth-type-sb" aria-label="Tipus de sintetitzador">
+                <option value="synth">Synth — oscil·lador bàsic</option>
+                <option value="amsynth">AM Synth — modulació d'amplitud</option>
+                <option value="fmsynth">FM Synth — modulació de freqüència</option>
+                <option value="monosynth">Mono Synth — monofònic amb filtre</option>
+                <option value="sampler">Sampler — usa el teu propi àudio</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label for="osc-type-sb">Forma d'Ona
+                <button class="info-btn" data-title="Formes d'ona" data-body="Triangular: suau i càlida. Senoidal: la més pura, sense harmònics. Quadrada: buida, tipus 8-bits. Serra (Sawtooth): la més brillant i rica en harmònics.">ⓘ</button>
+              </label>
+              <select id="osc-type-sb" aria-label="Forma d'ona">
+                <option value="triangle">△ Triangular (Triangle)</option>
+                <option value="sine">○ Senoidal (Sine)</option>
+                <option value="square">□ Quadrada (Square)</option>
+                <option value="sawtooth">◺ Serra (Sawtooth)</option>
+              </select>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Sampler Personalitzat</label>
+            <div class="drop-zone" id="drop-zone" aria-label="Zona per carregar fitxer d'àudio">
+              <input type="file" id="sample-file" accept="audio/*" aria-label="Seleccionar fitxer d'àudio">
+              <p>📁 Arrossega <b>.wav/.mp3</b> o fes clic</p>
+              <div id="file-name" class="filename"></div>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Volum Principal</label>
+            <div class="slider-row">
+              <input type="range" id="master-vol-sb" min="-40" max="0" value="-8" aria-label="Volum principal">
+              <div class="slider-val" id="val-vol-sb" aria-live="polite">-8dB</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button id="test-btn-sb" class="btn btn-cyan">▶ PROVAR SO</button>
+            <button id="clear-sample" class="btn btn-out btn-sm">Netejar Sample</button>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="seq-wrap">
-        <div class="note-labels" id="note-labels"></div>
-        <div class="seq-grid" id="seq-grid"></div>
+    <section class="module" id="module-viz-fft" aria-label="Analizador FFT">
+      <div class="module-header">
+        <h2><span class="icon">📊</span> Analitzador FFT <span class="header-subtitle">Quines freqüències componen el so?</span></h2>
+        <span class="tag">FREQÜÈNCIA</span>
       </div>
-
-      <div class="presets-bar">
-        <button class="preset-btn" data-preset="techno">Techno Kick</button>
-        <button class="preset-btn" data-preset="arpeggio">Arpegio Menor</button>
-        <button class="preset-btn" data-preset="trance">Trance Gate</button>
-        <button class="preset-btn" data-preset="pop">Pop Chord</button>
-        <button class="preset-btn" data-preset="bass">Basic Bass</button>
-        <button class="preset-btn" data-preset="ambient">Ambient Pad</button>
+      <div class="module-body">
+        <div class="viz-box">
+          <canvas id="fftCanvas-sb"></canvas>
+          <div class="viz-label">Spectrum Analysis</div>
+        </div>
+        <div class="viz-explanation">
+          <span>← Greus (bass)</span>
+          <span>Barra alta = més energia en aquesta freqüència</span>
+          <span>Aguts → (hi-hats)</span>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-</main>
+    <section class="module" id="module-viz-osc" aria-label="Osciloscopio">
+      <div class="module-header">
+        <h2><span class="icon">🌊</span> Oscil·loscopi <span class="header-subtitle">Quina forma té l'ona?</span></h2>
+        <span class="tag">OSCIL·LOSCOPI</span>
+      </div>
+      <div class="module-body">
+        <div class="viz-box">
+          <canvas id="oscCanvas-sb"></canvas>
+          <div class="viz-label">Live Waveform</div>
+        </div>
+        <div class="viz-explanation">
+          <span>Eix horitzontal = temps</span>
+          <span>Eix vertical = amplitud (volum)</span>
+          <span>La forma canvia segons l'ona seleccionada</span>
+        </div>
+      </div>
+    </section>
 
-<footer class="app-footer">
-  ADSR-Canvas Premium &copy; 2026 | Built for <a href="#">Aulatech Ecosystem</a> with Tone.js
-</footer>
+    <section class="module" id="module-seq" aria-label="Secuenciador de 16 pasos">
+      <div class="module-header">
+        <h2><span class="icon">🎹</span> Seqüenciador 16 Passos</h2>
+        <div class="badge btn-sm playing-state" style="display:none" aria-live="polite">EN VIU</div>
+      </div>
+      <div class="module-body">
+        <div class="seq-toolbar">
+          <button id="seq-play" class="btn btn-play-premium" aria-label="Reproduir o aturar">▶ REPRODUIR</button>
+          <button id="seq-clear" class="btn btn-out btn-sm" aria-label="Netejar grid">Netejar</button>
+          <div class="bpm-ctrl">
+            <label for="bpm-slider">BPM</label>
+            <input type="range" id="bpm-slider" min="60" max="180" value="120" aria-label="Tempo">
+            <span class="bpm-val" id="bpm-val" aria-live="polite">120</span>
+          </div>
+          <div class="seq-save-btns">
+            <button id="seq-save" class="btn btn-out btn-sm">💾 Desar</button>
+            <button id="seq-load" class="btn btn-out btn-sm">📂 Carregar</button>
+            <button id="seq-export" class="btn btn-out btn-sm">⬇ Exportar</button>
+          </div>
+        </div>
+        <div class="seq-wrap">
+          <div class="note-labels" id="note-labels"></div>
+          <div class="seq-grid" id="seq-grid"></div>
+        </div>
+        <div class="presets-bar">
+          <button class="preset-btn" data-preset="techno">Techno Kick</button>
+          <button class="preset-btn" data-preset="arpeggio">Arpegi Menor</button>
+          <button class="preset-btn" data-preset="trance">Trance Gate</button>
+          <button class="preset-btn" data-preset="pop">Pop Chord</button>
+          <button class="preset-btn" data-preset="bass">Bajo Básico</button>
+          <button class="preset-btn" data-preset="ambient">Ambient Pad</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer" role="contentinfo">
+    ADSR-Canvas &copy; 2026 | <a href="#">Aulatech</a> amb Tone.js
+    | <a href="#" id="footer-tutorial">Tutorial</a>
+  </footer>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="app.js"></script>
 </body>
